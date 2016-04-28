@@ -29,7 +29,7 @@
 
 #define res_pin 2 //D2
 
-#define photo_limit 950
+#define photo_limit 800
 
 SoftwareSerial BTSerial(BT_RX,RE_TX);
 
@@ -58,8 +58,8 @@ void setup() {
 void loop() {
 	if(BTSerial.available() > 0){
 	    BTinput = BTSerial.read();
-	}
-	switch (BTinput) {
+
+	    switch (BTinput) {
 	    case '1': //forward
 	    analogWrite(R_pos, 225);
         analogWrite(R_ant, 0);
@@ -101,8 +101,9 @@ void loop() {
 	    delay(1000);  
 	    digitalWrite(laser, LOW);
 	      break;
-
+	  }
 	}
+	
 
 	if(analogRead(photocell) > photo_limit && millis()-2000 > HP_time){
 		HP_time = millis();
@@ -117,17 +118,25 @@ void loop() {
 		    case 0:
 		      digitalWrite(led_3, LOW);
 		      HP = 3;
+		      analogWrite(R_pos, 0);
+              analogWrite(R_ant, 0);
+              analogWrite(L_pos, 0);
+              analogWrite(L_ant, 0);
 		      while(true){
 		      	if(digitalRead(res_pin) == HIGH){
+		      	  digitalWrite(led_1, HIGH);
+		      	  digitalWrite(led_2, HIGH);
+		      	  digitalWrite(led_3, HIGH);
 		      	  break;
+
 		      	}
 		      	digitalWrite(led_1, HIGH);
 		      	digitalWrite(led_2, HIGH);
 		      	digitalWrite(led_3, HIGH);
 		      	delay(500);
-		      	digitalWrite(led_1, HIGH);
-		      	digitalWrite(led_2, HIGH);
-		      	digitalWrite(led_3, HIGH);
+		      	digitalWrite(led_1, LOW);
+		      	digitalWrite(led_2, LOW);
+		      	digitalWrite(led_3, LOW);
 		      	delay(500);
 		      }
 		      HP_time = millis();
