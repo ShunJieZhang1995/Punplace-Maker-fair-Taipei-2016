@@ -12,22 +12,27 @@
 *
 * == == == == == == == == == == == == == == == == == == == == == == == ==*/
 #include "SoftwareSerial.h"
-#define BT_RX 3  //D3
-#define RE_TX 5  //D5
+#define BT_RX 5  //D5
+#define RE_TX 3  //D3
 #define R_pos 6  //D6
 #define R_ant 9  //D9
 #define L_pos 10 //D10
 #define L_ant 11 //D11
 
-#define photocell 14   //A0
+#define photocell_1 14   //A0
+#define photocell_2 15   //A1
+#define photocell_3 16   //A2
+#define photocell_4 17   //A3
+#define photocell_5 18   //A4
+#define photocell_6 19   //A5
 
 #define led_1 7 //D7
 #define led_2 8 //D8
 #define led_3 12 //D12
 
-#define laser 13 //D13
+#define laser 2 //D2
 
-#define res_pin 2 //D2
+#define res_pin 13 //D13
 
 #define photo_limit 800
 
@@ -98,15 +103,21 @@ void loop() {
 
 	    case '6': //laser
 	    digitalWrite(laser, HIGH);
-	    delay(1000);  
+	    delay(500);  
 	    digitalWrite(laser, LOW);
 	      break;
 	  }
 	}
 	
 
-	if(analogRead(photocell) > photo_limit && millis()-2000 > HP_time){
-		HP_time = millis();
+	if(millis()-1000 > HP_time){
+		if(analogRead(photocell_1) > photo_limit ||
+			analogRead(photocell_2) > photo_limit ||
+			analogRead(photocell_3) > photo_limit ||
+			analogRead(photocell_4) > photo_limit ||
+			analogRead(photocell_5) > photo_limit ||
+			analogRead(photocell_6) > photo_limit){
+				HP_time = millis();
 		HP -= 1;
 		switch (HP) {
 		    case 2:
@@ -142,8 +153,9 @@ void loop() {
 		      HP_time = millis();
 
 		      break;
-
+		  }
 		}
+	
 	}
 	delay(500);
 }
